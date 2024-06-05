@@ -1,0 +1,65 @@
+<body>
+<h1>Voting App</h1>
+   <div class="container">
+     <div class="left-container">
+       <div class="left">
+        <h2>Voters</h2>
+        <table>
+         <thead>
+           <tr>
+             <th>Name</th>
+             <th>Has Voted</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr *ngFor="let voter of voters">
+             <td>{{ voter.name }}</td>
+             <td>{{ voter.hasVoted ? 'Yes' : 'No' }}</td>
+           </tr>
+         </tbody>
+       </table>
+        <div>
+           <input type="text" [(ngModel)]="newVoterName" placeholder="New Voter Name" required>
+           <button (click)="addVoter()">Add Voter</button>
+         </div>
+       </div>
+       
+       <div class="bottom">
+        <h2>Vote!</h2>
+        <select [(ngModel)]="selectedVoterId" (change)="onVoterChange($event)">
+          <option [ngValue]="null" selected disabled>I am</option>
+          <option *ngFor="let voter of voters" [value]="voter.id">{{ voter.name }}</option>
+        </select>
+        <select [(ngModel)]="selectedCandidateId" (change)="onCandidateChange($event)">
+         <option [ngValue]="null" selected disabled>I vote for</option>
+          <option *ngFor="let candidate of candidates" [value]="candidate.id">{{ candidate.name }}</option>
+        </select>
+        <button (click)="vote()">Submit!</button>
+      </div>
+       
+     </div>
+    
+     
+     <div class="right">
+       <h2>Candidates</h2>
+       <table>
+         <thead>
+           <tr>
+             <th>Name</th>
+             <th>Votes</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr *ngFor="let candidate of candidates">
+             <td>{{ candidate.name }}</td>
+             <td>{{ candidate.votes }}</td>
+           </tr>
+         </tbody>
+       </table>
+       <div>
+         <input type="text" [(ngModel)]="newCandidateName" placeholder="New Candidate Name">
+         <button (click)="addCandidate()">Add Candidate</button>
+       </div>
+     </div>
+   </div>
+</body>
