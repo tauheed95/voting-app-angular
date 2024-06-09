@@ -5,6 +5,7 @@ import { Voter } from './models/voter';
 import { Candidate } from './models/candidate';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { VoteService } from './services/vote.service';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,9 @@ export class AppComponent implements OnInit {
   selectedVoterChangeObject:any;
   selectedCandidateChangeId:string = '';
   selectedCandidateChangeObject:any;
-
-  constructor(private voterService: VoterService, private candidateService: CandidateService) {}
+  message: string = '';
+  filteredVoters: Voter[] = [];
+  constructor(private voterService: VoterService, private candidateService: CandidateService, private voteService: VoteService) {}
 
   ngOnInit(): void {
     this.loadVoters();
@@ -33,9 +35,14 @@ export class AppComponent implements OnInit {
   }
 
   loadVoters(): void {
-    this.voterService.getVoters().subscribe(voters => this.voters = voters);
+    this.voterService.getVoters().subscribe(voters => {
+      this.voters = voters
+      this.filterVoters();
+     });
   }
-
+  filterVoters(): void {
+    this.filteredVoters = this.voters.filter(voter => voter.hasVoted === false);
+  }
   loadCandidates(): void {
     this.candidateService.getCandidates().subscribe(candidates => this.candidates = candidates);
   }
@@ -95,32 +102,34 @@ export class AppComponent implements OnInit {
   vote(): void {
     if (this.selectedVoterId && this.selectedCandidateId) {
       if (this.selectedVoterChangeObject && this.selectedCandidateChangeObject) {
-        if(this.selectedVoterChangeObject.hasVoted)
-        {
-         alert("Sorry, The Voter has already voted.")
-         this.selectedVoterId = null;
-         this.selectedCandidateId = null;
+        if (this.selectedVoterChangeObject.hasVoted) {
+          alert("Sorry, The Voter has already voted.");
+          this.selectedVoterId = null;
+          this.selectedCandidateId = null;
+        } else {
+          this.voteService.vote(this.selectedVoterId, this.selectedCandidateId).subscribe({
+            next: (response) => {
+              this.message = 'Vote recorded successfully.';
+              this.loadVoters();
+              this.loadCandidates();
+              this.selectedVoterId = null;
+              this.selectedCandidateId = null;
+            },
+            error: (error) => {
+              this.message = 'Voting operation failed. The voter might have already voted or the candidate might not exist.';
+              this.loadVoters();
+              this.loadCandidates();
+              this.selectedVoterId = null;
+              this.selectedCandidateId = null;
+            }
+          });
         }
-        else
-        {
-            this.selectedVoterChangeObject.hasVoted = true;
-            this.selectedCandidateChangeObject.votes += 1;
-    
-            this.voterService.updateVoter(this.selectedVoterChangeObject).subscribe(() => {
-              this.candidateService.updateCandidate(this.selectedCandidateChangeObject).subscribe(() => {
-                this.loadVoters();
-                this.loadCandidates();
-                this.selectedVoterId = null;
-                this.selectedCandidateId = null;
-              });
-            });
-        }
-        
       }
-    }
-    else
-    {
-        alert("Sorry, Please select proper value from dropdown!")
+    } else {
+      alert("Sorry, Please select proper value from dropdown!");
+              this.selectedVoterId = null;
+              this.selectedCandidateId = null;
     }
   }
+  
 }

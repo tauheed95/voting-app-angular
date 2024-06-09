@@ -6,6 +6,7 @@ export const Constant = {
         UPDATE_VOTER:'voters/updateVoter',
         GET_ALL_CANDIDATES:'candidates/getcandidateslist',
         ADD_CANDIDATE:'candidates/addcandidates',
-        UPDATE_CANDIDATE:'candidates/updateCandidate'
+        UPDATE_CANDIDATE:'candidates/updateCandidate',
+        VOTE:'vote/'
     }
 }

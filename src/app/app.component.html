@@ -28,7 +28,7 @@
         <h2>Vote!</h2>
         <select [(ngModel)]="selectedVoterId" (change)="onVoterChange($event)">
           <option [ngValue]="null" selected disabled>I am</option>
-          <option *ngFor="let voter of voters" [value]="voter.id">{{ voter.name }}</option>
+          <option *ngFor="let voter of filteredVoters" [value]="voter.id">{{ voter.name }}</option>
         </select>
         <select [(ngModel)]="selectedCandidateId" (change)="onCandidateChange($event)">
          <option [ngValue]="null" selected disabled>I vote for</option>
