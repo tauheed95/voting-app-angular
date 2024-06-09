@@ -27,13 +27,31 @@ export class AppComponent implements OnInit {
   selectedCandidateChangeObject:any;
   message: string = '';
   filteredVoters: Voter[] = [];
+  isAddVoterModalVisible = false;
+  isAddCandidateModalVisible = false;
+
   constructor(private voterService: VoterService, private candidateService: CandidateService, private voteService: VoteService) {}
 
   ngOnInit(): void {
     this.loadVoters();
     this.loadCandidates();
   }
+  showAddVoterModal() {
+    this.isAddVoterModalVisible = true;
+  }
 
+  hideAddVoterModal() {
+    this.isAddVoterModalVisible = false;
+    this.newVoterName = '';
+  }
+  showAddCandidateModal() {
+    this.isAddCandidateModalVisible = true;
+  }
+
+  hideAddCandidateModal() {
+    this.isAddCandidateModalVisible = false;
+    this.newCandidateName = '';
+  }
   loadVoters(): void {
     this.voterService.getVoters().subscribe(voters => {
       this.voters = voters
@@ -58,6 +76,7 @@ export class AppComponent implements OnInit {
         this.voterService.addVoter(voter).subscribe(() => {
             this.loadVoters();
             this.newVoterName = '';
+            this.hideAddVoterModal();
           });
     }
     
@@ -82,6 +101,7 @@ export class AppComponent implements OnInit {
             this.candidateService.addCandidate(candidate).subscribe(() => {
                 this.loadCandidates();
                 this.newCandidateName = '';
+                this.hideAddCandidateModal();
               });
         }
     }

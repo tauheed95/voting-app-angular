@@ -3,9 +3,16 @@
    <div class="container">
      <div class="left-container">
        <div class="left">
-        <h2>Voters</h2>
-        <table>
+        <table style="width:100%">
          <thead>
+          <tr>
+            <th colspan="3">
+              <div class="header-content">
+                <span class="header-title">Voters</span>
+                <button class="add-button" (click)="showAddVoterModal()">+</button>
+            </div>
+            </th>
+          </tr>
            <tr>
              <th>Name</th>
              <th>Has Voted</th>
@@ -18,15 +25,11 @@
            </tr>
          </tbody>
        </table>
-        <div>
-           <input type="text" [(ngModel)]="newVoterName" placeholder="New Voter Name" required>
-           <button (click)="addVoter()">Add Voter</button>
-         </div>
        </div>
        
        <div class="bottom">
         <h2>Vote!</h2>
-        <select [(ngModel)]="selectedVoterId" (change)="onVoterChange($event)">
+          <select [(ngModel)]="selectedVoterId" (change)="onVoterChange($event)">
           <option [ngValue]="null" selected disabled>I am</option>
           <option *ngFor="let voter of filteredVoters" [value]="voter.id">{{ voter.name }}</option>
         </select>
@@ -41,9 +44,16 @@
     
      
      <div class="right">
-       <h2>Candidates</h2>
-       <table>
+       <table style="width:100%">
          <thead>
+          <tr>
+            <th colspan="3">
+              <div class="header-content">
+                <span class="header-title">Candidates</span>
+                <button class="add-button" (click)="showAddCandidateModal()">+</button>
+            </div>
+            </th>
+          </tr>
            <tr>
              <th>Name</th>
              <th>Votes</th>
@@ -56,10 +66,36 @@
            </tr>
          </tbody>
        </table>
-       <div>
-         <input type="text" [(ngModel)]="newCandidateName" placeholder="New Candidate Name">
-         <button (click)="addCandidate()">Add Candidate</button>
-       </div>
      </div>
    </div>
 </body>
+
+<!-- Voter Modal -->
+<div id="addVoterModal" class="modal" [ngClass]="{'show': isAddVoterModalVisible}">
+  <div class="modal-content">
+      <span class="close" (click)="hideAddVoterModal()">&times;</span>
+      <h2>Add New Voter</h2>
+      <div>
+          <input type="text" [(ngModel)]="newVoterName" placeholder="New Voter Name" required>
+      </div>
+      <div>
+          <button (click)="addVoter()">Save</button>
+          <button (click)="hideAddVoterModal()">Cancel</button>
+      </div>
+  </div>
+</div>
+
+<!-- Candidate Modal -->
+<div id="addCandidateModal" class="modal" [ngClass]="{'show': isAddCandidateModalVisible}">
+  <div class="modal-content">
+      <span class="close" (click)="hideAddCandidateModal()">&times;</span>
+      <h2>Add New Candidate</h2>
+      <div>
+          <input type="text" [(ngModel)]="newCandidateName" placeholder="New Candidate Name" required>
+      </div>
+      <div>
+          <button (click)="addCandidate()">Save</button>
+          <button (click)="hideAddCandidateModal()">Cancel</button>
+      </div>
+  </div>
+</div>
